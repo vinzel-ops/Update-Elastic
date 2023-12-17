@@ -1,53 +1,60 @@
-# Updating Elasticsearch to the Latest Version
+# Automating Updates for Elasticsearch and Kibana
 
-This document provides a step-by-step guide to update Elasticsearch to the latest version on Debian-based operating systems, such as Ubuntu, addressing common issues that may arise.
+## Introduction
 
-## Issues and Solutions
+This document provides a guide on how to automate updates for Elasticsearch and Kibana to the latest versions using the official Elastic repositories. This process involves addressing issues with `wget` execution, replacing the deprecated `apt-key` method, and adding and using the Elastic repository.
 
-### 1. Problems Executing `wget`
+## Preparation
 
-**Issue**: An error occurs when running `wget`, with the message: "/usr/bin/wget: /usr/bin/wget: cannot execute binary file".
+### Ensuring `wget` Functionality
 
-**Solution**: Reinstall `wget` to ensure it functions correctly.
+Ensure that `wget` is functioning correctly on your system. If there are issues, reinstall it:
 
 ```bash
 sudo apt-get install --reinstall wget
 ```
 
-### 2. Deprecated Use of `apt-key`
+### Handling Deprecated `apt-key`
 
-**Issue**: `apt-key` is deprecated, and a warning appears when attempting to add Elasticsearch's GPG key.
+The latest versions of Debian and its derivatives have deprecated `apt-key`. Instead, we will use keyring files.
 
-**Solution**: Use a more modern approach by directly adding the GPG key to the system's keyring.
+## Adding Elasticsearch Repository
 
-## Update Steps
+1. **Add Elasticsearch GPG Key**:
+   To add the Elasticsearch GPG key to your system's keyring, use the command:
 
-Follow these steps to update Elasticsearch:
+   ```bash
+   wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor | sudo tee /usr/share/keyrings/elasticsearch.gpg > /dev/null
+   ```
 
-### Step 1: Adding Elasticsearch GPG Key
+2. **Add Elasticsearch Repository**:
+   Add the Elasticsearch repository to your system with:
 
-Add the Elasticsearch GPG key to your system's keyring to ensure the security and authenticity of the packages.
+   ```bash
+   echo "deb [signed-by=/usr/share/keyrings/elasticsearch.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+   ```
 
-```bash
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor | sudo tee /usr/share/keyrings/elasticsearch.gpg > /dev/null
-```
+3. **Update and Install Elasticsearch**:
+   To update and install Elasticsearch:
 
-### Step 2: Adding Elasticsearch Repository
+   ```bash
+   sudo apt-get update && sudo apt-get install elasticsearch
+   ```
 
-Add the official Elasticsearch repository to your system. This ensures that you will receive the latest updates directly from Elastic.
+## Adding Kibana Repository
 
-```bash
-echo "deb [signed-by=/usr/share/keyrings/elasticsearch.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
-```
+The process for Kibana is similar to Elasticsearch.
 
-### Step 3: Update and Install Elasticsearch
+1. **Add GPG Key and Repository for Kibana**:
+   Use the same steps as for Elasticsearch, ensuring to change the URL and keyring file name appropriately for Kibana.
 
-After adding the repository, update your package list and install Elasticsearch.
+2. **Update and Install Kibana**:
+   Run the update and install for Kibana:
 
-```bash
-sudo apt-get update && sudo apt-get install elasticsearch
-```
+   ```bash
+   sudo apt-get update && sudo apt-get install kibana
+   ```
 
 ## Conclusion
 
-Following these steps will ensure that your system can safely and efficiently update Elasticsearch to the latest version.
+By adding the official Elastic repositories and using the latest methods for keyring management, you can ensure that your system is always updated with the latest versions of Elasticsearch and Kibana. Always remember to backup configurations and data before performing updates.
