@@ -1,28 +1,40 @@
+# Update Elasticsearch and Kibana Script
 
-# Bash Script for Automatic Elasticsearch Update
+## Overview
 
-This document explains how to use the provided Bash script for automatically updating Elasticsearch to the latest version.
+The `updateelastic.sh` script automates the process of updating Elasticsearch and Kibana to their latest versions. It handles the addition of official Elastic repositories, updates the GPG keys, and installs the latest versions of Elasticsearch and Kibana.
 
-## Prerequisites
+## Script Content
 
-- Ensure you have `wget` installed on your system.
-- Elasticsearch should be already installed.
-- You need to have sufficient permissions to run system updates and install packages.
+The script performs the following actions:
+1. Reinstalls `wget` to ensure it's functioning correctly.
+2. Adds the GPG keys and repositories for Elasticsearch and Kibana.
+3. Updates and installs the latest versions of Elasticsearch and Kibana.
 
 ## Usage
 
-1. **Save the Script**: Save the provided script as `updateelastic.sh`.
+### Steps to Use the Script
+
+1. **Download the Script**: Download `updateelastic.sh` to your server where Elasticsearch and Kibana are installed.
 
 2. **Make the Script Executable**:
-   Run the following command to make the script executable:
+   Grant execute permissions to the script:
    ```bash
    chmod +x updateelastic.sh
    ```
 
 3. **Run the Script**:
-   Execute the script by running:
+   Execute the script as a superuser:
    ```bash
-   ./updateelastic.sh
+   sudo ./updateelastic.sh
    ```
 
-The script will check the current version of Elasticsearch installed on your system and compare it with the latest version available. If the versions differ, it will automatically update Elasticsearch.
+### Important Notes
+
+- Ensure that you have backup configurations and data of Elasticsearch and Kibana before running the script.
+- The script requires `sudo` privileges to install packages and add repositories.
+- It is recommended to review the script before running it to make sure it aligns with your system configurations.
+
+## Conclusion
+
+This script simplifies the maintenance of Elasticsearch and Kibana by automating their update process. Regular updates are crucial for security patches, performance improvements, and accessing new features.
